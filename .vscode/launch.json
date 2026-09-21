@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-KeelungsightsApplication<keelungsights>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.keelungsights.KeelungsightsApplication",
+            "projectName": "keelungsights",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

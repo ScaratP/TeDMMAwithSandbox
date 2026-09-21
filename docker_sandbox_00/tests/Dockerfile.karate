@@ -1,0 +1,7 @@
+FROM eclipse-temurin:17-jre
+WORKDIR /usr/src/app
+
+RUN wget https://github.com/karatelabs/karate/releases/download/v1.4.1/karate-1.4.1.jar -O karate.jar
+RUN echo "function fn() { return {}; }" > karate-config.js
+
+COPY karate/ /usr/src/app/

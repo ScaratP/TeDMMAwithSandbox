@@ -1,0 +1,43 @@
+services:
+  visit-service:
+    build:
+      context: ./visit-service
+    env_file:
+      - ./visit-service/.env
+    ports:
+    - "8081:8080"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  karate-tester:
+    build:
+      context: ./tests
+      dockerfile: Dockerfile.karate
+    depends_on:
+      visit-service:
+        condition: service_healthy
+    volumes:
+      - ./test_reports/karate:/usr/src/app/target
+    command: >
+      bash -c "
+      echo '=== Karate tests started ===' > /usr/src/app/target/karate_console.txt &&
+      java -jar karate.jar visit-service_api_test_1.feature >> /usr/src/app/target/karate_console.txt 2>&1
+      "
+
+  pact-verifier:
+    image: pactfoundation/pact-cli:latest
+    depends_on:
+      visit-service:
+        condition: service_healthy
+    volumes:
+      - ./tests/pact:/app/pact
+      - ./test_reports/pact:/app/reports
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "pact verify
+      --provider-base-url http://visit-service:8080
+      --pact-urls /app/pact/visit-service_contract_1.json > /app/reports/pact_console.txt 2>&1"

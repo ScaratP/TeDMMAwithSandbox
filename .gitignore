@@ -1,2 +1,6 @@
 migrate_project/
 temp_project_source/
+treesitter.txt/
+*__pycache__
+rag_knowledge_base/
+api_key.txt

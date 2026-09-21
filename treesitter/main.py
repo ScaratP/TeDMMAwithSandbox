@@ -74,7 +74,15 @@ async def main():
     with open(f"./llm_analysis_result/{TARGET_ZIP_FILE}_analysis_response.txt", "w", encoding="utf-8") as f:
         f.write(analysis_response)
     print(">>> AST analysis_response extracted.\n\n.")
-    atg.generate_api_test(analysis_response, prompt_test_cases, expected_endpoint)
+    # atg.generate_api_test(analysis_response, prompt_test_cases, expected_endpoint)
+    
+    # 接收生成的結果
+    api_test_result = atg.generate_api_test(analysis_response, prompt_test_cases, expected_endpoint)
+
+    # 將結果寫入新的檔案 (例如命名為 .feature)
+    with open(f"./{TARGET_ZIP_FILE}_api_test.feature", "w", encoding="utf-8") as f:
+        f.write(api_test_result)
+    print(">>> API test generated and saved.")
     
     ### LLM baseline output ###
     # analysis_pure_text = atg.analyze_pure_test(pure_text)

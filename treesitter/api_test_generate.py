@@ -78,6 +78,8 @@ The input consists of structured Python-like dictionaries categorized by:
     print(analysis_response.content)
     return analysis_response.content
 
+
+
 def generate_api_test(analyzed_ast, test_case, expected_endpoint): 
 #     prompt = f"""
 # # Role
@@ -191,6 +193,7 @@ Please perform the following steps:
 
     response = llm.invoke(prompt)
     print(response.content)
+    return response.content
     
 ### test ###
 def analyze_pure_test(pure_text):

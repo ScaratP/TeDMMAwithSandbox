@@ -1,0 +1,15 @@
+/*===Controller===*/
+{'class_name': 'SightController', 'component_type': 'Controller', 'class_path': '/api/sights', 'annotations': ['@RestController', '@RequestMapping'], 'dependencies': ['SightService'], 'methods': [{'name': 'getSightsByZone', 'method_path': '/{zone}', 'params': ['String zone'], 'return_type': 'List<Sight>'}, {'name': 'mapZone', 'method_path': None, 'params': ['String zoneId'], 'return_type': 'String'}], 'docstring': None}
+
+/*===Repository===*/
+{'repo_name': None, 'component_type': 'Repository', 'base_interface': None, 'managed_entity': None, 'id_type': None, 'methods': [{'name': 'getItems', 'return_type': 'List<Sight>', 'params': '(String zone)', 'annotations': []}], 'annotations': [], 'docstring': None}
+
+/*===Entity===*/
+{'entity_name': 'Sight', 'component_type': 'Entity', 'superclass': None, 'annotations': ['@Document', '@Data'], 'fields': [{'name': 'id', 'type': 'String', 'annotations': ['@Id']}, {'name': 'sightName', 'type': 'String', 'annotations': []}, {'name': 'zone', 'type': 'String', 'annotations': []}, {'name': 'category', 'type': 'String', 'annotations': []}, {'name': 'photoURL', 'type': 'String', 'annotations': []}, {'name': 'description', 'type': 'String', 'annotations': []}, {'name': 'address', 'type': 'String', 'annotations': []}]}
+
+/*===Repository===*/
+{'repo_name': 'SightRepository', 'component_type': 'Repository', 'base_interface': 'MongoRepository', 'managed_entity': 'Sight', 'id_type': 'String', 'methods': [{'name': 'findByZone', 'return_type': 'List<Sight>', 'params': '(String zone)', 'annotations': []}], 'annotations': [], 'docstring': None}
+
+/*===Service===*/
+{'class_name': 'SightService', 'component_type': 'Service', 'class_path': None, 'annotations': ['@Service'], 'dependencies': ['SightRepository'], 'methods': [{'name': 'getSightsByZone', 'method_path': None, 'params': ['String zone'], 'return_type': 'List<Sight>'}], 'docstring': None}
+

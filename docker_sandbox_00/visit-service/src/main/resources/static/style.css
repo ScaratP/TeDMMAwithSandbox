@@ -1,0 +1,171 @@
+:root {
+    /* 莫蘭迪色系定義 */
+    --morandi-bg: #F2F1ED;       /* 溫潤暖白背景 */
+    --morandi-primary: #7B8B88;  /* 灰綠色主調 */
+    --morandi-secondary: #9FAAA6;/* 淺灰綠輔助 */
+    --morandi-dark: #4A5351;     /* 深灰綠文字 */
+    --morandi-muted: #8E9694;    /* 淺灰文字 */
+    --morandi-card: #FFFFFF;     /* 純白卡片 */
+    --morandi-border: #E5E4E0;   /* 邊框色 */
+}
+
+body {
+    background-color: var(--morandi-bg);
+    color: var(--morandi-dark);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "微軟正黑體", sans-serif;
+    letter-spacing: 0.5px;
+}
+
+/* 像素風標題點綴 */
+.pixel-title {
+    font-family: 'DotGothic16', sans-serif;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+}
+
+/* 導覽列 */
+.custom-navbar {
+    background-color: var(--morandi-primary);
+    color: white;
+    padding: 1rem 0;
+}
+.custom-navbar .navbar-brand {
+    color: white;
+}
+
+/* 標題與載入文字 */
+.custom-title {
+    color: var(--morandi-dark);
+    font-weight: 300;
+    font-size: 1.4rem;
+}
+.loading-text {
+    color: var(--morandi-primary);
+}
+
+/* 篩選按鈕 - 扁平化與微調框線 */
+.custom-zone-btn {
+    background-color: transparent;
+    border: 1px solid var(--morandi-secondary);
+    color: var(--morandi-primary);
+    padding: 6px 20px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+.custom-zone-btn:hover, .custom-zone-btn.active {
+    background-color: var(--morandi-primary);
+    color: white;
+    border-color: var(--morandi-primary);
+}
+
+/* 卡片設計 - 移除浮誇陰影，改為俐落的邊線與微陰影 */
+.custom-card {
+    border: 1px solid var(--morandi-border);
+    border-radius: 6px;
+    background-color: var(--morandi-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+.custom-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(74, 83, 81, 0.06);
+}
+
+/* 圖片直出置頂 */
+.card-img-custom {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 6px 6px 0 0;
+    border-bottom: 1px solid var(--morandi-border);
+}
+
+/* 標籤設計 */
+.custom-badge {
+    background-color: var(--morandi-secondary);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: normal;
+}
+.custom-badge.category {
+    background-color: var(--morandi-border);
+    color: var(--morandi-dark);
+}
+
+/* 文字截斷邏輯 */
+.sight-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--morandi-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 限制顯示3行 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.sight-desc.expanded {
+    -webkit-line-clamp: unset;
+}
+
+/* 顯示更多按鈕 */
+.show-more-btn {
+    background: none;
+    border: none;
+    color: var(--morandi-primary);
+    padding: 0;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.show-more-btn:hover {
+    color: var(--morandi-dark);
+}
+
+/* 底部操作區 */
+.card-footer-custom {
+    margin-top: auto;
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--morandi-border);
+}
+.address-text {
+    font-size: 0.85rem;
+    color: var(--morandi-muted);
+}
+.map-link {
+    color: var(--morandi-primary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    border: 1px solid var(--morandi-primary);
+    padding: 4px 10px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+.map-link:hover {
+    background-color: var(--morandi-primary);
+    color: white;
+}
+
+/* 無圖片佔位區塊 */
+.no-image-placeholder {
+    width: 100%;
+    height: 220px;
+    background-color: var(--morandi-border);
+    color: var(--morandi-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px 6px 0 0;
+    border-bottom: 1px solid var(--morandi-border);
+    font-size: 0.95rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+}

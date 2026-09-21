@@ -1,0 +1,97 @@
+{
+  "consumer": {
+    "name": "api-gateway"
+  },
+  "provider": {
+    "name": "visit-service"
+  },
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "interactions": [
+    {
+      "description": "Get sights by zone",
+      "request": {
+        "method": "GET",
+        "path": "/sights",
+        "query": "zone=north"
+      },
+      "response": {
+        "status": 200,
+        "body": [
+          {
+            "id": "1",
+            "sightName": "Sight Name",
+            "zone": "north",
+            "category": "Category",
+            "photoURL": "http://example.com/photo.jpg",
+            "description": "Description of the sight",
+            "address": "123 Sight St"
+          }
+        ]
+      },
+      "providerStates": [
+        {
+          "name": "A sight with zone north exists"
+        }
+      ]
+    },
+    {
+      "description": "Get sight by ID",
+      "request": {
+        "method": "GET",
+        "path": "/sights/1"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "id": "1",
+          "sightName": "Sight Name",
+          "zone": "north",
+          "category": "Category",
+          "photoURL": "http://example.com/photo.jpg",
+          "description": "Description of the sight",
+          "address": "123 Sight St"
+        }
+      },
+      "providerStates": [
+        {
+          "name": "A sight with ID 1 exists"
+        }
+      ]
+    },
+    {
+      "description": "Get sight by non-existing ID",
+      "request": {
+        "method": "GET",
+        "path": "/sights/999"
+      },
+      "response": {
+        "status": 404
+      },
+      "providerStates": [
+        {
+          "name": "No sight with ID 999 exists"
+        }
+      ]
+    },
+    {
+      "description": "Get sights with invalid zone",
+      "request": {
+        "method": "GET",
+        "path": "/sights",
+        "query": "zone=invalid-zone"
+      },
+      "response": {
+        "status": 400
+      },
+      "providerStates": [
+        {
+          "name": "Invalid zone parameter is provided"
+        }
+      ]
+    }
+  ]
+}

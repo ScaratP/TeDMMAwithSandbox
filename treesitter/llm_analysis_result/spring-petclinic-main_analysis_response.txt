@@ -1,0 +1,18 @@
+- **Service Map**:
+    - SightService:
+        - Controllers: [SightController]
+        - Services: [SightService]
+        - Entities: [Sight]
+        - Shared Libraries: []
+- **Dependency Graph**:
+    - SightController -> SightService:
+        - Type: REST
+        - Logic: SightController.getSightsByZone
+        - Path: /api/sights/{zone}
+    - SightService -> SightRepository:
+        - Type: REST
+        - Logic: SightService.getSightsByZone
+        - Path: findByZone
+- **Data Schemas**:
+    - SightService API DTOs:
+        - Sight: {id: String, sightName: String, zone: String, category: String, photoURL: String, description: String, address: String}
