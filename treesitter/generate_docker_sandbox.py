@@ -11,11 +11,11 @@ WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_SOURCE = WORKSPACE_ROOT / "treesitter/temp_project_source/spring-petclinic-main"
 DEFAULT_KARATE = (
     WORKSPACE_ROOT
-    / "treesitter/generated_tests/visit-service/visit-service_api_test_1.feature"
+    / "treesitter/karate_feature/visit-service/visit-service_api_test_1.feature"
 )
 DEFAULT_PACT = (
     WORKSPACE_ROOT
-    / "treesitter/generated_tests/visit-service/visit-service_contract_1.json"
+    / "treesitter/pact_contract/visit-service/visit-service_contract_1.json"
 )
 DEFAULT_OUTPUT = WORKSPACE_ROOT / "docker_sandbox"
 
@@ -79,7 +79,7 @@ ENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]
 
 
 def dockerfile_karate() -> str:
-    return """FROM eclipse-temurin:17-jre
+    return """FROM maven:3.9.6-eclipse-temurin-21-jammy
 WORKDIR /usr/src/app
 
 RUN wget https://github.com/karatelabs/karate/releases/download/v1.4.1/karate-1.4.1.jar -O karate.jar

@@ -1,15 +1,57 @@
-/*===Controller===*/
-{'class_name': 'SightController', 'component_type': 'Controller', 'class_path': '/api/sights', 'annotations': ['@RestController', '@RequestMapping'], 'dependencies': ['SightService'], 'methods': [{'name': 'getSightsByZone', 'method_path': '/{zone}', 'params': ['String zone'], 'return_type': 'List<Sight>'}, {'name': 'mapZone', 'method_path': None, 'params': ['String zoneId'], 'return_type': 'String'}], 'docstring': None}
-
-/*===Repository===*/
-{'repo_name': None, 'component_type': 'Repository', 'base_interface': None, 'managed_entity': None, 'id_type': None, 'methods': [{'name': 'getItems', 'return_type': 'List<Sight>', 'params': '(String zone)', 'annotations': []}], 'annotations': [], 'docstring': None}
+/*===Entity===*/
+{'entity_name': 'BaseEntity', 'component_type': 'Entity', 'superclass': None, 'annotations': ['@MappedSuperclass'], 'fields': [{'name': 'id', 'type': 'Integer', 'annotations': ['@Id', '@GeneratedValue']}]}
 
 /*===Entity===*/
-{'entity_name': 'Sight', 'component_type': 'Entity', 'superclass': None, 'annotations': ['@Document', '@Data'], 'fields': [{'name': 'id', 'type': 'String', 'annotations': ['@Id']}, {'name': 'sightName', 'type': 'String', 'annotations': []}, {'name': 'zone', 'type': 'String', 'annotations': []}, {'name': 'category', 'type': 'String', 'annotations': []}, {'name': 'photoURL', 'type': 'String', 'annotations': []}, {'name': 'description', 'type': 'String', 'annotations': []}, {'name': 'address', 'type': 'String', 'annotations': []}]}
+{'entity_name': 'NamedEntity', 'component_type': 'Entity', 'superclass': 'BaseEntity', 'annotations': ['@MappedSuperclass'], 'fields': [{'name': 'name', 'type': 'String', 'annotations': ['@Column', '@NotBlank']}]}
+
+/*===Entity===*/
+{'entity_name': 'Person', 'component_type': 'Entity', 'superclass': 'BaseEntity', 'annotations': ['@MappedSuperclass'], 'fields': [{'name': 'firstName', 'type': 'String', 'annotations': ['@Column', '@Size', '@NotBlank']}, {'name': 'lastName', 'type': 'String', 'annotations': ['@Column', '@Size', '@NotBlank']}]}
+
+/*===Entity===*/
+{'entity_name': 'Owner', 'component_type': 'Entity', 'superclass': 'Person', 'annotations': ['@Entity', '@Table'], 'fields': [{'name': 'address', 'type': 'String', 'annotations': ['@Column', '@NotBlank']}, {'name': 'city', 'type': 'String', 'annotations': ['@Column', '@NotBlank']}, {'name': 'telephone', 'type': 'String', 'annotations': ['@Column', '@NotBlank', '@Pattern']}, {'name': 'pets', 'type': 'List<Pet>', 'annotations': ['@OneToMany', '@JoinColumn', '@OrderBy']}]}
+
+/*===Controller===*/
+{'class_name': 'OwnerController', 'component_type': 'Controller', 'class_path': None, 'annotations': ['@Controller'], 'dependencies': ['String', 'OwnerRepository'], 'methods': [{'name': 'setAllowedFields', 'method_path': None, 'params': ['WebDataBinder dataBinder'], 'return_type': 'void'}, {'name': 'findOwner', 'method_path': None, 'params': ['Integer ownerId'], 'return_type': 'Owner'}, {'name': 'initCreationForm', 'method_path': '/owners/new', 'params': [], 'return_type': 'String'}, {'name': 'processCreationForm', 'method_path': '/owners/new', 'params': ['Owner owner'], 'return_type': 'String'}, {'name': 'initFindForm', 'method_path': '/owners/find', 'params': [], 'return_type': 'String'}, {'name': 'processFindForm', 'method_path': '/owners', 'params': ['Owner owner'], 'return_type': 'String'}, {'name': 'addPaginationModel', 'method_path': None, 'params': ['Model model'], 'return_type': 'String'}, {'name': 'findPaginatedForOwnersLastName', 'method_path': None, 'params': ['String lastname'], 'return_type': 'Page<Owner>'}, {'name': 'initUpdateOwnerForm', 'method_path': '/owners/{ownerId}/edit', 'params': [], 'return_type': 'String'}, {'name': 'processUpdateOwnerForm', 'method_path': '/owners/{ownerId}/edit', 'params': ['Owner owner'], 'return_type': 'String'}, {'name': 'showOwner', 'method_path': '/owners/{ownerId}', 'params': [], 'return_type': 'ModelAndView'}], 'docstring': None}
 
 /*===Repository===*/
-{'repo_name': 'SightRepository', 'component_type': 'Repository', 'base_interface': 'MongoRepository', 'managed_entity': 'Sight', 'id_type': 'String', 'methods': [{'name': 'findByZone', 'return_type': 'List<Sight>', 'params': '(String zone)', 'annotations': []}], 'annotations': [], 'docstring': None}
+{'repo_name': 'OwnerRepository', 'component_type': 'Repository', 'base_interface': 'JpaRepository', 'managed_entity': 'Owner', 'id_type': 'Integer', 'methods': [{'name': 'findByLastNameStartingWith', 'return_type': 'Page<Owner>', 'params': '(String lastName, Pageable pageable)', 'annotations': []}, {'name': 'findById', 'return_type': 'Optional<Owner>', 'params': '(Integer id)', 'annotations': []}], 'annotations': [], 'docstring': None}
 
-/*===Service===*/
-{'class_name': 'SightService', 'component_type': 'Service', 'class_path': None, 'annotations': ['@Service'], 'dependencies': ['SightRepository'], 'methods': [{'name': 'getSightsByZone', 'method_path': None, 'params': ['String zone'], 'return_type': 'List<Sight>'}], 'docstring': None}
+/*===Entity===*/
+{'entity_name': 'Pet', 'component_type': 'Entity', 'superclass': 'NamedEntity', 'annotations': ['@Entity', '@Table'], 'fields': [{'name': 'birthDate', 'type': 'LocalDate', 'annotations': ['@Column', '@DateTimeFormat']}, {'name': 'type', 'type': 'PetType', 'annotations': ['@ManyToOne', '@JoinColumn']}, {'name': 'visits', 'type': 'Set<Visit>', 'annotations': ['@OneToMany', '@JoinColumn', '@OrderBy']}]}
+
+/*===Controller===*/
+{'class_name': 'PetController', 'component_type': 'Controller', 'class_path': '/owners/{ownerId}', 'annotations': ['@Controller', '@RequestMapping'], 'dependencies': ['String', 'OwnerRepository', 'PetTypeRepository'], 'methods': [{'name': 'populatePetTypes', 'method_path': None, 'params': [], 'return_type': 'Collection<PetType>'}, {'name': 'findOwner', 'method_path': None, 'params': [], 'return_type': 'Owner'}, {'name': 'findPet', 'method_path': None, 'params': ['Integer petId'], 'return_type': 'Pet'}, {'name': 'initOwnerBinder', 'method_path': None, 'params': ['WebDataBinder dataBinder'], 'return_type': 'void'}, {'name': 'initPetBinder', 'method_path': None, 'params': ['WebDataBinder dataBinder'], 'return_type': 'void'}, {'name': 'initCreationForm', 'method_path': '/pets/new', 'params': ['Owner owner'], 'return_type': 'String'}, {'name': 'processCreationForm', 'method_path': '/pets/new', 'params': ['Owner owner'], 'return_type': 'String'}, {'name': 'initUpdateForm', 'method_path': '/pets/{petId}/edit', 'params': [], 'return_type': 'String'}, {'name': 'processUpdateForm', 'method_path': '/pets/{petId}/edit', 'params': ['Owner owner'], 'return_type': 'String'}, {'name': 'updatePetDetails', 'method_path': None, 'params': ['Owner owner'], 'return_type': 'void'}], 'docstring': None}
+
+/*===Entity===*/
+{'entity_name': None, 'component_type': 'Entity', 'superclass': None, 'annotations': [], 'fields': []}
+
+/*===Repository===*/
+{'repo_name': None, 'component_type': 'Repository', 'base_interface': None, 'managed_entity': None, 'id_type': None, 'methods': [{'name': 'print', 'return_type': 'String', 'params': '(PetType petType, Locale locale)', 'annotations': []}, {'name': 'parse', 'return_type': 'PetType', 'params': '(String text, Locale locale)', 'annotations': []}], 'annotations': [], 'docstring': None}
+
+/*===Repository===*/
+{'repo_name': 'PetTypeRepository', 'component_type': 'Repository', 'base_interface': 'JpaRepository', 'managed_entity': 'PetType', 'id_type': 'Integer', 'methods': [{'name': 'findPetTypes', 'return_type': 'List<PetType>', 'params': '()', 'annotations': []}], 'annotations': [], 'docstring': None}
+
+/*===Entity===*/
+{'entity_name': 'Visit', 'component_type': 'Entity', 'superclass': 'BaseEntity', 'annotations': ['@Entity', '@Table'], 'fields': [{'name': 'date', 'type': 'LocalDate', 'annotations': ['@Column', '@DateTimeFormat']}, {'name': 'description', 'type': 'String', 'annotations': ['@NotBlank']}]}
+
+/*===Controller===*/
+{'class_name': 'VisitController', 'component_type': 'Controller', 'class_path': None, 'annotations': ['@Controller'], 'dependencies': ['OwnerRepository'], 'methods': [{'name': 'setAllowedFields', 'method_path': None, 'params': ['WebDataBinder dataBinder'], 'return_type': 'void'}, {'name': 'loadPetWithVisit', 'method_path': None, 'params': ['Map<String, Object> model'], 'return_type': 'Visit'}, {'name': 'minVisitDate', 'method_path': None, 'params': [], 'return_type': 'LocalDate'}, {'name': 'initNewVisitForm', 'method_path': '/owners/{ownerId}/pets/{petId}/visits/new', 'params': [], 'return_type': 'String'}, {'name': 'processNewVisitForm', 'method_path': '/owners/{ownerId}/pets/{petId}/visits/new', 'params': ['Owner owner'], 'return_type': 'String'}], 'docstring': None}
+
+/*===Controller===*/
+{'class_name': 'CrashController', 'component_type': 'Controller', 'class_path': None, 'annotations': ['@Controller'], 'dependencies': [], 'methods': [{'name': 'triggerException', 'method_path': '/oups', 'params': [], 'return_type': 'String'}], 'docstring': None}
+
+/*===Controller===*/
+{'class_name': 'WelcomeController', 'component_type': 'Controller', 'class_path': None, 'annotations': ['@Controller'], 'dependencies': [], 'methods': [{'name': 'welcome', 'method_path': '/', 'params': [], 'return_type': 'String'}], 'docstring': None}
+
+/*===Entity===*/
+{'entity_name': None, 'component_type': 'Entity', 'superclass': None, 'annotations': [], 'fields': []}
+
+/*===Entity===*/
+{'entity_name': 'Vet', 'component_type': 'Entity', 'superclass': 'Person', 'annotations': ['@Entity', '@Table'], 'fields': [{'name': 'specialties', 'type': 'Set<Specialty>', 'annotations': ['@ManyToMany', '@JoinTable']}]}
+
+/*===Controller===*/
+{'class_name': 'VetController', 'component_type': 'Controller', 'class_path': None, 'annotations': ['@Controller'], 'dependencies': ['VetRepository'], 'methods': [{'name': 'showVetList', 'method_path': '/vets.html', 'params': ['Model model'], 'return_type': 'String'}, {'name': 'addPaginationModel', 'method_path': None, 'params': ['Page<Vet> paginated'], 'return_type': 'String'}, {'name': 'findPaginated', 'method_path': None, 'params': [], 'return_type': 'Page<Vet>'}, {'name': 'showResourcesVetList', 'method_path': None, 'params': [], 'return_type': 'Vets'}], 'docstring': None}
+
+/*===Repository===*/
+{'repo_name': 'VetRepository', 'component_type': 'Repository', 'base_interface': 'Repository', 'managed_entity': 'Vet', 'id_type': 'Integer', 'methods': [{'name': 'findAll', 'return_type': 'Collection<Vet>', 'params': '()', 'annotations': []}, {'name': 'findAll', 'return_type': 'Page<Vet>', 'params': '(Pageable pageable)', 'annotations': []}], 'annotations': [], 'docstring': None}
 

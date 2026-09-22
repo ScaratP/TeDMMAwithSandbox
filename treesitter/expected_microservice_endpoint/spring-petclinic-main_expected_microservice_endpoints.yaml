@@ -1,39 +1,37 @@
-# 微服務邊界規劃檔 (Microservice Decomposition Plan)
-# 基於 TeDMMA 方法，提供給 LoGMIMT 生成測試案例之輸入依據
+services:
+  - name: pet-service
+    basePath: /pets
+    endpoints:
+      - GET /pets
+      - GET /pets/{petId}
+      - POST /pets
+      - PUT /pets/{petId}
+      - DELETE /pets/{petId}
 
-microservices:
-  - name: "sight-query-service"
-    description: "負責基隆景點資訊的查詢與展示"
-    bounded_context: "Sight"
-    expected_endpoints:
-      - path: "/sights"
-        methods: ["GET"]
-      - path: "/sights/{id}"
-        methods: ["GET"]
-    components:
-      controllers:
-        - "SightController"
-      services:
-        - "SightService"
-      repositories:
-        - "SightRepository"
-      entities:
-        - "Sight"
-      dtos: []
+  - name: vet-service
+    basePath: /vets
+    endpoints:
+      - GET /vets
+      - GET /vets/{vetId}
+      - POST /vets
+      - PUT /vets/{vetId}
+      - DELETE /vets/{vetId}
 
-  - name: "sight-crawler-service"
-    description: "負責從外部來源定時爬取基隆景點資料並更新系統"
-    bounded_context: "Crawler"
-    expected_endpoints: 
-      # 假設爬蟲服務提供手動觸發的端點，或為內部排程無對外端點
-      - path: "/crawler/trigger"
-        methods: ["POST"]
-    components:
-      controllers: []
-      services:
-        - "KeelungSightsCrawler"
-      repositories:
-        # 可能共用資料庫或透過 Message Queue 傳遞給 Query 服務
-        - "SightRepository" 
-      entities:
-        - "Sight"   
+  - name: visit-service
+    basePath: /visits
+    endpoints:
+      - GET /visits
+      - GET /visits/{visitId}
+      - POST /visits
+      - PUT /visits/{visitId}
+      - DELETE /visits/{visitId}
+
+  - name: customer-service
+    basePath: /customer
+    endpoints:
+      - GET /owners
+      - GET /owners/{ownerId}
+      - POST /owners
+      - PUT /owners/{ownerId}
+      - DELETE /owners/{ownerId}
+      - GET /owners/{ownerId}/pets

@@ -2,8 +2,6 @@ services:
   visit-service:
     build:
       context: ./visit-service
-    env_file:
-      - ./visit-service/.env
     ports:
     - "8081:8080"
     healthcheck:

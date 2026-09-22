@@ -1,25 +1,43 @@
 ### [Service Identification]
-- **Target Service**: sight-query-service
+- **Target Service**: pet-service
 
 ### [Artifacts: Karate API Testing]
-- **File Name**: src/test/resources/sight-query-service/karate/sight-query.feature
+- **File Name**: src/test/resources/pet-service/karate/pet-service.feature
 - **Testing Code**:
 ```gherkin
-Feature: Sight Query Service API
+Feature: Pet Service API
 
   Background:
     * url 'http://localhost:8080'
 
-  Scenario: Get all sights by zone
-    Given path '/sights'
-    And param zone = 'North'
-    When method GET
+  Scenario: Get all pets
+    Given path '/pets'
+    When method get
     Then status 200
-    And match response == { id: '#string', sightName: '#string', zone: 'North', category: '#string', photoURL: '#string', description: '#string', address: '#string' }
+    And match response == []
 
-  Scenario: Get sight by ID
-    Given path '/sights/1'
-    When method GET
+  Scenario: Get pet by ID
+    Given path '/pets/1'
+    When method get
     Then status 200
-    And match response == { id: '1', sightName: 'Keelung Night Market', zone: 'North', category: 'Food', photoURL: 'http://example.com/photo.jpg', description: 'A vibrant night market.', address: 'No. 1, Keelung Rd, Keelung City' }
+    And match response == { id: 1, name: 'Buddy', birthDate: '2020-01-01', typeId: 1 }
+
+  Scenario: Create a new pet
+    Given path '/pets'
+    And request { name: 'Max', birthDate: '2020-01-01', typeId: 1 }
+    When method post
+    Then status 201
+    And match response == { id: '#number', name: 'Max', birthDate: '2020-01-01', typeId: 1 }
+
+  Scenario: Update an existing pet
+    Given path '/pets/1'
+    And request { name: 'Buddy Updated', birthDate: '2020-01-01', typeId: 1 }
+    When method put
+    Then status 200
+    And match response == { id: 1, name: 'Buddy Updated', birthDate: '2020-01-01', typeId: 1 }
+
+  Scenario: Delete a pet
+    Given path '/pets/1'
+    When method delete
+    Then status 204
 ```

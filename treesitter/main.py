@@ -80,7 +80,7 @@ async def main():
     api_test_result = atg.generate_api_test(analysis_response, prompt_test_cases, expected_endpoint)
 
     # 將結果寫入新的檔案 (例如命名為 .feature)
-    with open(f"./{TARGET_ZIP_FILE}_api_test.feature", "w", encoding="utf-8") as f:
+    with open(f"./karate_feature/{TARGET_ZIP_FILE}_api_test.feature", "w", encoding="utf-8") as f:
         f.write(api_test_result)
     print(">>> API test generated and saved.")
     

@@ -1,14 +1,33 @@
 {
-    "configurations": [
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-KeelungsightsApplication<keelungsights>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.example.keelungsights.KeelungsightsApplication",
+      "projectName": "keelungsights",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/User/Desktop/2026SOSELab/yi/TeDMMAwithSandbox/treesitter/tree-sitter-venv/Lib/site-packages/greenlet",
+      "program": "c:/Users/User/Desktop/2026SOSELab/yi/TeDMMAwithSandbox/treesitter/tree-sitter-venv/Lib/site-packages/greenlet/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
         {
-            "type": "java",
-            "name": "Spring Boot-KeelungsightsApplication<keelungsights>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "com.example.keelungsights.KeelungsightsApplication",
-            "projectName": "keelungsights",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
         }
-    ]
+      ]
+    }
+  ]
 }

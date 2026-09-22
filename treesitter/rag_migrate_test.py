@@ -20,7 +20,7 @@ from haystack_integrations.document_stores.elasticsearch import ElasticsearchDoc
 from haystack_integrations.components.retrievers.elasticsearch import ElasticsearchBM25Retriever, ElasticsearchEmbeddingRetriever
 from haystack.components.embedders import OpenAIDocumentEmbedder, OpenAITextEmbedder
 from haystack.components.joiners import DocumentJoiner
-from haystack_integrations.components.embedders.sentence_transformers import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
+from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
 
 
 from haystack_experimental.chat_message_stores.in_memory import InMemoryChatMessageStore
@@ -128,24 +128,20 @@ def generate_test_case_by_BM25():
         yaml_content = f.read()
     with open(f"./llm_analysis_result/{MIGRATE_PROJECT_NAME}_analysis_response.txt", "r", encoding="utf-8") as f:
         analysis_content = f.read()
-    # 消融實驗：最佳Prompt設定
-    '''
     with open(f"./monolith_test_case_codes/{MIGRATE_PROJECT_NAME}_test_cases.txt", "r", encoding="utf-8") as f:
         test_cases = f.read()
-    
         
     # === Test: Whether monolithic features effect the result === #
     with open(f"./monolith_features/{MIGRATE_PROJECT_NAME}_features.txt", "r", encoding="utf-8") as f:
         monolith_features = f.read()
-    '''
 
     karate_contents = ""
     
     # === LoGMIMT Karate === #
-    for f in Path(f"./karate_feature").glob("*.feature"):
+    for f in Path(f"./karate_feature/{MIGRATE_PROJECT_NAME}").glob("*.feature"):
         karate_contents += f"\n=== {f.name} ===\n{open(f, 'r', encoding='utf-8').read()}"
         
-    for f in Path(f"./pact_contract/").rglob("*.json"):
+    for f in Path(f"./pact_contract/{MIGRATE_PROJECT_NAME}/").rglob("*.feature"):
         karate_contents += f"\n=== {f.name} ===\n{open(f, 'r', encoding='utf-8').read()}"
         
     # === LLM baseline karate === #
@@ -156,18 +152,6 @@ def generate_test_case_by_BM25():
     
     
     # 建立一個靜態 Pipeline，專門用來直接吐出這三個 Input
-    '''
-    在Prompt中移除
-    4. Legacy system's test case:
-    {test_cases}
-    
-    5. LLM monolithic system features:
-    {monolith_features}
-    
-    減少 Token 與避免卡住
-    '''
-    
-    
     static_input_pipeline = Pipeline()
     static_input_pipeline.add_component(
         "builder", 
@@ -182,7 +166,11 @@ def generate_test_case_by_BM25():
         3. Existing Karate feature files:
         {karate_contents}
         
+        4. Legacy system's test case:
+        {test_cases}
         
+        5. LLM monolithic system features:
+        {monolith_features}
         """)
     )
 
@@ -287,7 +275,7 @@ def generate_test_case_by_BM25():
         if not question.strip():
             continue
         
-        result = conversational_rag_agent.run(
+        conversational_rag_agent.run(
             data={
                 "message_retriever": {
                     "current_messages": [ChatMessage.from_user(question)],
@@ -296,63 +284,5 @@ def generate_test_case_by_BM25():
                 "message_writer": {"chat_history_id": chat_history_id},
             }
         )
-        
-        try:
-            # 1. 根據最新 Haystack 的回傳結構，精準提取 last_message 內的文字
-            output_text = ""
-            if "agent" in result and "last_message" in result["agent"]:
-                last_msg = result["agent"]["last_message"]
-                
-                # 兼容不同版本 Haystack 的 ChatMessage 物件屬性
-                if hasattr(last_msg, 'text') and last_msg.text:
-                    output_text = last_msg.text
-                elif hasattr(last_msg, 'content'):
-                    # 若為字串則直接讀取，若為 TextContent 列表則讀取第一筆的 text
-                    if isinstance(last_msg.content, str):
-                        output_text = last_msg.content
-                    elif isinstance(last_msg.content, list) and hasattr(last_msg.content[0], 'text'):
-                        output_text = last_msg.content[0].text
-                    else:
-                        output_text = str(last_msg.content)
-            
-            if not output_text:
-                print(f"\n⚠️ 無法從 Pipeline 輸出中提取文字，請檢查原始結果結構。")
-                continue
-            
-            # 2. 放寬正則表達式的匹配規則 (相容 gherkin, karate 以及末尾空白)
-            import re
-            karate_blocks = re.findall(r'```(?:gherkin|karate|feature)\s*\n(.*?)\n```', output_text, re.DOTALL | re.IGNORECASE)
-            pact_blocks = re.findall(r'```json\s*\n(.*?)\n```', output_text, re.DOTALL | re.IGNORECASE)
-            
-            # 3. 建立專屬該微服務的輸出資料夾
-            import os
-            output_karate_dir = f"./karate_feature"
-            output_pact_dir = f"./pact_contract"
-            os.makedirs(output_karate_dir, exist_ok=True)
-            os.makedirs(output_pact_dir, exist_ok=True)
-
-            if not karate_blocks and not pact_blocks:
-                print(f"\n⚠️ LLM 未依照格式輸出 Markdown 區塊。將儲存完整原始文字供除錯。")
-                debug_file = os.path.join(output_karate_dir, f"{question.strip()}_raw_output.txt")
-                with open(debug_file, "w", encoding="utf-8") as f:
-                    f.write(output_text)
-                print(f"✅ 成功儲存原始輸出: {debug_file}")
-            
-            # 4. 儲存 Karate (.feature) 檔案
-            for idx, block in enumerate(karate_blocks):
-                file_path = os.path.join(output_karate_dir, f"{question.strip()}_api_test.feature")
-                with open(file_path, "w", encoding="utf-8") as f:
-                    f.write(block.strip())
-                print(f"✅ 成功儲存 Karate 測試: {file_path}")
-                
-            # 5. 儲存 Pact (.json) 檔案
-            for idx, block in enumerate(pact_blocks):
-                file_path = os.path.join(output_pact_dir, f"{question.strip()}_contract.json")
-                with open(file_path, "w", encoding="utf-8") as f:
-                    f.write(block.strip())
-                print(f"✅ 成功儲存 Pact 契約: {file_path}")
-
-        except Exception as e:
-            print(f"\n⚠️ 存檔過程發生錯誤: {e}")
         
 generate_test_case_by_BM25()

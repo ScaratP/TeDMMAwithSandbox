@@ -12,84 +12,107 @@
   },
   "interactions": [
     {
-      "description": "Get sights by zone",
+      "description": "Get all visits",
       "request": {
-        "method": "GET",
-        "path": "/sights",
-        "query": "zone=north"
+        "method": "get",
+        "path": "/visits"
       },
       "response": {
         "status": 200,
         "body": [
           {
-            "id": "1",
-            "sightName": "Sight Name",
-            "zone": "north",
-            "category": "Category",
-            "photoURL": "http://example.com/photo.jpg",
-            "description": "Description of the sight",
-            "address": "123 Sight St"
+            "id": 1,
+            "date": "2023-10-01",
+            "description": "Check-up"
           }
         ]
       },
       "providerStates": [
         {
-          "name": "A sight with zone north exists"
+          "name": "Visits exist"
         }
       ]
     },
     {
-      "description": "Get sight by ID",
+      "description": "Get visit by ID",
       "request": {
-        "method": "GET",
-        "path": "/sights/1"
+        "method": "get",
+        "path": "/visits/1"
       },
       "response": {
         "status": 200,
         "body": {
-          "id": "1",
-          "sightName": "Sight Name",
-          "zone": "north",
-          "category": "Category",
-          "photoURL": "http://example.com/photo.jpg",
-          "description": "Description of the sight",
-          "address": "123 Sight St"
+          "id": 1,
+          "date": "2023-10-01",
+          "description": "Check-up"
         }
       },
       "providerStates": [
         {
-          "name": "A sight with ID 1 exists"
+          "name": "Visit with ID 1 exists"
         }
       ]
     },
     {
-      "description": "Get sight by non-existing ID",
+      "description": "Create a new visit",
       "request": {
-        "method": "GET",
-        "path": "/sights/999"
+        "method": "post",
+        "path": "/visits",
+        "body": {
+          "date": "2023-10-01",
+          "description": "Check-up"
+        }
       },
       "response": {
-        "status": 404
+        "status": 201,
+        "body": {
+          "id": 1,
+          "date": "2023-10-01",
+          "description": "Check-up"
+        }
       },
       "providerStates": [
         {
-          "name": "No sight with ID 999 exists"
+          "name": "Ready to create a visit"
         }
       ]
     },
     {
-      "description": "Get sights with invalid zone",
+      "description": "Update an existing visit",
       "request": {
-        "method": "GET",
-        "path": "/sights",
-        "query": "zone=invalid-zone"
+        "method": "put",
+        "path": "/visits/1",
+        "body": {
+          "date": "2023-10-02",
+          "description": "Follow-up"
+        }
       },
       "response": {
-        "status": 400
+        "status": 200,
+        "body": {
+          "id": 1,
+          "date": "2023-10-02",
+          "description": "Follow-up"
+        }
       },
       "providerStates": [
         {
-          "name": "Invalid zone parameter is provided"
+          "name": "Visit with ID 1 exists"
+        }
+      ]
+    },
+    {
+      "description": "Delete a visit",
+      "request": {
+        "method": "delete",
+        "path": "/visits/1"
+      },
+      "response": {
+        "status": 204
+      },
+      "providerStates": [
+        {
+          "name": "Visit with ID 1 exists"
         }
       ]
     }

@@ -4,3 +4,15 @@ treesitter.txt/
 *__pycache__
 rag_knowledge_base/
 api_key.txt
+.vscode/
+docker_sandbox/
+docker_sandbox_00/
+docker_sandbox_mock/
+docker_sandbox_mock_00/
+.venv/
+expected_microservice_endpoint/
+karate_feature/
+llm_analysis_result/
+monolith_features/
+monolith_test_case_codes/
+pact_contract/
