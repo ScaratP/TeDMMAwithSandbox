@@ -1,7 +1,0 @@
-FROM maven:3.9.6-eclipse-temurin-21-jammy
-WORKDIR /usr/src/app
-
-RUN wget https://github.com/karatelabs/karate/releases/download/v1.4.1/karate-1.4.1.jar -O karate.jar
-RUN echo "function fn() { return {}; }" > karate-config.js
-
-COPY karate/ /usr/src/app/
